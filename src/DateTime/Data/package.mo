@@ -16,8 +16,8 @@ package Data "This package provides basic time computation constants like the Po
   record LeapSeconds "Contains data for leap seconds as of 2025. year contains the year added, dayAdded index of the day in the year it was added on"
     extends Modelica.Icons.Record;
     parameter Integer num = 27;
-    parameter Integer years[27] = {1972, 1972, 1973, 1974, 1975, 1976, 1977, 1978, 1979, 1981, 1982, 1983, 1985, 1987, 1989, 1990, 1992, 1993, 1994, 1995, 1997, 1998, 2005, 2008, 2012, 2015, 2016};
-    parameter Integer dayAdded[27] = {182, 365, 365, 365, 365, 366, 365, 365, 365, 182, 182, 182, 182, 182, 182, 182, 182, 182, 182, 182, 182, 182, 182, 182, 182, 182, 182};  
+    parameter Integer years[27] =    {1972, 1972, 1973, 1974, 1975, 1976, 1977, 1978, 1979, 1981, 1982, 1983, 1985, 1987, 1989, 1990, 1992, 1993, 1994, 1995, 1997, 1998, 2005, 2008, 2012, 2015, 2016};
+    parameter Integer dayAdded[27] = { 182,  366,  365,  365,  365,  366,  365,  365,  365,  182,  182,  182,  182,  365,  365,  365,  182,  182,  182,  365,  182,  365,  365,  366,  182,  182,  366};  
     parameter Types.Datetime datetimes[27] = {Types.Datetime(year=1972, month=6, day=30, hours=23, minutes=59, seconds=60.0, tz="UTC"), 
       Types.Datetime(year=1972, month=12, day=31, hours=23, minutes=59, seconds=60.0, tz="UTC"), 
       Types.Datetime(year=1973, month=12, day=31, hours=23, minutes=59, seconds=60.0, tz="UTC"), 
