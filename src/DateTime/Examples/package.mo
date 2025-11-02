@@ -174,6 +174,53 @@ respective instantiation of DateTime.DateTimeSystem.</p>
       annotation(
         experiment(StartTime = 0, StopTime = 1.05408e+07, Tolerance = 1e-06, Interval = 120));
   end PowerMeter;
+
+  class RollingMill "Power consumption pattern of a rolling mill"
+    extends Modelica.Blocks.Icons.Block;
+    parameter Real powerScalingFactor = 1;
+    Modelica.Blocks.Interfaces.BooleanInput trigger annotation(
+      Placement(transformation(origin = {-120, 0}, extent = {{-20, -20}, {20, 20}}), iconTransformation(origin = {-120, 0}, extent = {{-20, -20}, {20, 20}})));
+    Modelica.Blocks.Logical.Timer timer1 annotation(
+      Placement(transformation(origin = {-50, 0}, extent = {{-10, -10}, {10, 10}})));
+    Modelica.Blocks.Tables.CombiTable1Dv combiTable1D1(table = [0, 0; 1800, 500e3; 3600, 600e3; 7200, 600e3; 9000, 800e3; 9900, 800e3; 10800, 600e3; 12600, 100e3; 14400, 0], tableOnFile = false) annotation(
+      Placement(transformation(origin = {2, 0}, extent = {{-10, -10}, {10, 10}})));
+    Modelica.Blocks.Math.Gain powerscaling(k = powerScalingFactor) annotation(
+      Placement(transformation(origin = {50, 0}, extent = {{-10, -10}, {10, 10}})));
+    Modelica.Blocks.Interfaces.RealOutput power annotation(
+      Placement(transformation(origin = {110, 0}, extent = {{-10, -10}, {10, 10}}), iconTransformation(origin = {114, -2}, extent = {{-10, -10}, {10, 10}})));
+  equation
+    connect(combiTable1D1.y[1], powerscaling.u) annotation(
+      Line(points = {{13, 0}, {37, 0}, {37, 0}, {37, 0}}, color = {0, 0, 127}));
+    connect(timer1.y, combiTable1D1.u[1]) annotation(
+      Line(points = {{-39, 0}, {-11, 0}, {-11, 0}, {-11, 0}}, color = {0, 0, 127}));
+    connect(trigger, timer1.u) annotation(
+      Line(points = {{-120, 0}, {-62, 0}}, color = {255, 0, 255}));
+    connect(powerscaling.y, power) annotation(
+      Line(points = {{62, 0}, {110, 0}}, color = {0, 0, 127}));
+    annotation(
+      Icon(graphics = {Rectangle(origin = {4, -5}, fillColor = {238, 238, 236}, fillPattern = FillPattern.Solid, extent = {{-70, 65}, {68, -61}}), Rectangle(origin = {3, -73}, fillPattern = FillPattern.Solid, extent = {{-53, -7}, {53, 7}}), Rectangle(origin = {2, -2}, fillColor = {207, 234, 237}, fillPattern = FillPattern.Solid, extent = {{-56, 48}, {56, -48}}), Rectangle(origin = {-50, 0}, fillColor = {85, 87, 83}, fillPattern = FillPattern.Solid, extent = {{-44, 4}, {28, -4}}), Rectangle(origin = {22, -2}, fillColor = {85, 87, 83}, fillPattern = FillPattern.Solid, extent = {{-44, 4}, {4, 0}}), Rectangle(origin = {70, -4}, fillColor = {85, 87, 83}, fillPattern = FillPattern.Solid, extent = {{-44, 4}, {26, 2}}), Ellipse(origin = {-19, 20}, lineColor = {85, 87, 83}, fillColor = {186, 189, 182}, fillPattern = FillPattern.Sphere, extent = {{-20, 20}, {20, -20}}, endAngle = 360), Ellipse(origin = {-19, -20}, lineColor = {85, 87, 83}, fillColor = {186, 189, 182}, fillPattern = FillPattern.Sphere, extent = {{-20, 20}, {20, -20}}, endAngle = 360), Ellipse(origin = {25, 14}, lineColor = {85, 87, 83}, fillColor = {186, 189, 182}, fillPattern = FillPattern.Sphere, extent = {{-15, 15}, {15, -15}}, endAngle = 360), Ellipse(origin = {25, -16}, lineColor = {85, 87, 83}, fillColor = {186, 189, 182}, fillPattern = FillPattern.Sphere, extent = {{-15, 15}, {15, -15}}, endAngle = 360)}, coordinateSystem(initialScale = 0.1)),
+      experiment(StartTime = 0, StopTime = 1, Tolerance = 1e-6, Interval = 0.002));
+  end RollingMill;
+
+  model RollingMillStart "Example for how to model a repeated pattern of a process, e.g. a rolling mill in a manufacturing process as part of a workshift"
+    extends Modelica.Icons.Example;
+    inner DateTimeSystem dateTimeSystem(startDateTime = "2026-03-26T00:00", timezone = DateTime.Data.Timezones.Etc.UTC)  annotation(
+      Placement(transformation(origin = {50, 70}, extent = {{-10, -10}, {10, 10}})));
+    Basic.SimDateTime simDateTime annotation(
+      Placement(transformation(origin = {70, 70}, extent = {{-10, -10}, {10, 10}})));
+    RollingMill rollingMill(powerScalingFactor = 1e-5)  annotation(
+      Placement(transformation(origin = {30, 0}, extent = {{-10, -10}, {10, 10}})));
+    Basic.Schedule startRollingMill(triggerDateTime = "2026-03-26T08:00", onTime = 14400, repetition = "workdays", triggerTimezone = DateTime.Data.Timezones.Europe.CET_CEST)  annotation(
+      Placement(transformation(origin = {-30, 0}, extent = {{-10, -10}, {10, 10}})));
+  equation
+    connect(startRollingMill.y, rollingMill.trigger) annotation(
+      Line(points = {{-18, 0}, {18, 0}}, color = {255, 0, 255}));
+  annotation(
+    Documentation(info = "<html>
+  <p>The rolling mill in this example starts every workday morning, beginning at 2026-03-26T08:00 in CET. Simulation starts on 2026-03-29T00:00. The example's dateTimeSystem is in UTC, thus showing behavior over daylight savings CEST starting on 2026-03-29, i.e. the 5th day of simulation. Note 08:00 CET=07:00 UTC, and 08:00 CEST=06:00 UTC</p>
+  </html>"),
+    experiment(StartTime = 0, StopTime = 432000, Tolerance = 1e-06, Interval = 60));
+  end RollingMillStart;
   
   annotation(
     Documentation(info = "<html>
