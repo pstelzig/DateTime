@@ -46,7 +46,7 @@ package Examples "Examples of how to apply the DateTime library. Copyright <html
 
   model ToSimPosixTime
     extends Modelica.Icons.Example;
-    inner DateTime.DateTimeSystem dateTimeSystem(final startDateTime = "2019-10-03T08:00:00", timezone = DateTime.Data.Timezones.Europe.CET_CEST, final holidays = "2019-10-03;2019-10-31;2019-12-25;2019-12-26;2020-01-01") annotation(
+    inner DateTime.DateTimeSystem dateTimeSystem(final startDateTime = "2019-10-03T08:00:00", timezone = DateTime.Data.Timezones.Europe.CET_CEST, final holidays = {"2019-10-03", "2019-10-31", "2019-12-25", "2019-12-26", "2020-01-01"}) annotation(
       Placement(visible = true, transformation(origin = {-70, 70}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
     DateTime.Basic.SimPosixTime simPosixTime annotation(
       Placement(visible = true, transformation(origin = {-50, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
