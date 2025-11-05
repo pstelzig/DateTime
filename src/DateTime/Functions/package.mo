@@ -1292,6 +1292,7 @@ The return values are as follows
     input Datetime dt "Datetime object to which to add a repetition";
     input String repetition "Valid values are hourly, daily, weekly, monthly, yearly, workdays firstDayInMonth, lastDayInMonth, or a floating point number specifying a repetition interval in seconds";
     input Timezone tz "Timezone object the DateTime object is interpreted in";
+    input Data.WorkDays workDays "List of workdays";
     input String holidays[:] "List of holidays in YYYY-MM-DD format";
     input Boolean withLeapSeconds = false "Flag to account for leap seconds";
     input Boolean autocorrect = true "If date after incrementing by discrete quanitities is invalid (days in month flow over, will correct to latest day in month). If time of day is invalid in timezone, will correct using correctInvalidDatetime according to the strategy chosen";
@@ -1303,7 +1304,6 @@ The return values are as follows
     Date d_added;
     Timefield tod;  // Time of day
     Real r;
-    Data.WorkDays wd;
     Integer i;
     Integer dow;  // Day of week
     Boolean nextWdFound;
@@ -1415,7 +1415,7 @@ The return values are as follows
   
       assert(isValidDatetime(dt_added, tz) == 1, "Adding yearly repetition to datetime resulted in an invalid datetime: " + String(dt_added));
   
-    // Repetition until first workday is hit from wd is hit, and the date is not in datetimeSystem.holidays;
+    // Repetition until first workday is hit from workDays is hit, and the date is not in datetimeSystem.holidays;
     elseif repetition == "workdays" then
       nextWdFound := false;
       d_added := d;
@@ -1424,7 +1424,7 @@ The return values are as follows
         dow := dayOfWeek(d_added.year, d_added.month, d_added.day);
         
         // Is standard workday
-        nextWdFound := (Modelica.Math.Vectors.find(dow, wd.days) <> 0);      
+        nextWdFound := (Modelica.Math.Vectors.find(dow, workDays.days) <> 0);      
         
         // Happens to fall on a holiday?
         for i in 1:size(holidays, 1) loop
@@ -1537,6 +1537,7 @@ by letting 3600 s (for hourly) or the respective floating point number of second
     input Datetime initTrigger;
     input String repetition;
     input Timezone tz;
+    input Data.WorkDays workDays;
     input String holidays[:];
     input Boolean withLeapSeconds = false "Flag to account for leap seconds";
     input Boolean autocorrect = true "If date after incrementing by discrete quanitities is invalid (days in month flow over, will correct to latest day in month). If time of day is invalid in timezone, will correct using correctInvalidDatetime according to the strategy chosen";
@@ -1559,7 +1560,7 @@ by letting 3600 s (for hourly) or the respective floating point number of second
   
     // Loop to find largest previous trigger
     while not prevFound loop
-      nextTrigger := addSingleRepetitionToDatetime(prevTrigger, repetition, tz, holidays, withLeapSeconds, autocorrect, strategy);
+      nextTrigger := addSingleRepetitionToDatetime(prevTrigger, repetition, tz, workDays, holidays, withLeapSeconds, autocorrect, strategy);
       nextTriggerPosix := datetimeToPosix(nextTrigger, tz, withLeapSeconds);
       if nextTriggerPosix <= simTimePosix then
         prevTrigger := nextTrigger;

@@ -6,9 +6,10 @@ package DateTime "A Modelica-native library for calendaric dates, times, and sch
     extends DateTime.Icons.WorldIcon;
     extends DateTime.Icons.ClockIconWhiteTransparent;
     parameter String startDateTime "Start datemolib (identified with simulation time 0) passed as a string in ISO 8601 format YYYY-MM-DDTHH:MM:SS.SSSSSS";
-    parameter DateTime.Types.Timezone timezone = DateTime.Data.Timezones.Europe.CET_CEST;
+    parameter DateTime.Types.Timezone timezone = DateTime.Data.Timezones.Europe.CET_CEST "The timezone used in this date and time system";
+    parameter DateTime.Data.WorkDays workDays = DateTime.Data.WorkDays(days = {1, 2, 3, 4, 5}) "Workdays, by default Monday,...,Friday. 0=Sunday, 1=Monday,...";
     parameter String holidays[:] = fill("", 0) "Array of dates in format YYYY-MM-DD";
-    parameter Boolean withLeapSeconds = false;
+    parameter Boolean withLeapSeconds = false "Whether to use leap second correction or not";
     Real startPosix;
   algorithm
     when initial() then    
