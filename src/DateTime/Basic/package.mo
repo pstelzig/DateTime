@@ -129,14 +129,14 @@ model in which SimWeekday is used.</p>
     when initial() then
       initTrigger := DateTime.Functions.parseDatetime(triggerDateTime);
       initTriggerPosix := DateTime.Functions.datetimeToPosix(initTrigger, triggerTimezone, dateTimeSystem.withLeapSeconds);
-      (prevTrigger, prevTriggerPosix) := DateTime.Functions.largestPreviousTrigger(dateTimeSystem.startPosix + time, initTrigger, repetition, triggerTimezone, dateTimeSystem.workDays, dateTimeSystem.holidays, dateTimeSystem.withLeapSeconds, autocorrect, strategy);
+      (prevTrigger, prevTriggerPosix) := DateTime.Functions.largestPreviousTrigger(dateTimeSystem.startPosix + time, initTrigger, repetition, triggerTimezone, dateTimeSystem.workdays, dateTimeSystem.holidays, dateTimeSystem.withLeapSeconds, autocorrect, strategy);
     end when;
 
     simTimePosix := dateTimeSystem.startPosix + time;
 
     // Update previous trigger and next trigger once sim time is past the previous trigger
     when repetition <> "" and simTimePosix >= prevTriggerPosix + onTime then
-      prevTrigger := DateTime.Functions.addSingleRepetitionToDatetime(prevTrigger, repetition, triggerTimezone, dateTimeSystem.workDays, dateTimeSystem.holidays, dateTimeSystem.withLeapSeconds, autocorrect, strategy);
+      prevTrigger := DateTime.Functions.addSingleRepetitionToDatetime(prevTrigger, repetition, triggerTimezone, dateTimeSystem.workdays, dateTimeSystem.holidays, dateTimeSystem.withLeapSeconds, autocorrect, strategy);
       prevTriggerPosix := DateTime.Functions.datetimeToPosix(prevTrigger, triggerTimezone, dateTimeSystem.withLeapSeconds);
     end when;
 
