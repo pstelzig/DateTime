@@ -1,5 +1,5 @@
 within ;
-package DateTime "A Modelica-native library for calendrical dates, times, and scheduling. Copyright <html>&copy;</html> Dr. Philipp Emanuel Stelzig, 2019-2025. ALL RIGHTS RESERVED."
+package DateTime "A Modelica-native library for calendrical dates, times, and scheduling. Copyright <html>&copy;</html> Dr. Philipp Emanuel Stelzig, 2019-present. ALL RIGHTS RESERVED."
   extends DateTime.Icons.DatetimeIcon;
 
   model DateTimeSystem "System properties for Datetime (common absolute start date time, holidays)"

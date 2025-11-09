@@ -1,6 +1,6 @@
 within DateTime;
 
-package Icons "Collection of icons for the Datetime library. Copyright <html>&copy;</html> Dr. Philipp Emanuel Stelzig, 2019-2025. ALL RIGHTS RESERVED."
+package Icons "Collection of icons for the Datetime library. Copyright <html>&copy;</html> Dr. Philipp Emanuel Stelzig, 2019-present. ALL RIGHTS RESERVED."
   extends Modelica.Icons.IconsPackage;
 
   partial class ClockIcon "Clock icon"

@@ -1,6 +1,6 @@
 within DateTime;
 
-package Examples "Examples of how to apply the DateTime library. Copyright <html>&copy;</html> Dr. Philipp Emanuel Stelzig, 2019-2025. ALL RIGHTS RESERVED."
+package Examples "Examples of how to apply the DateTime library. Copyright <html>&copy;</html> Dr. Philipp Emanuel Stelzig, 2019-present. ALL RIGHTS RESERVED."
   extends Modelica.Icons.ExamplesPackage;
 
   model ScheduledSignals

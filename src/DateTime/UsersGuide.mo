@@ -1,6 +1,6 @@
 within DateTime;
 
-package UsersGuide "User's Guide to the DateTime package. Copyright <html>&copy;</html> Dr. Philipp Emanuel Stelzig, 2019-2025. ALL RIGHTS RESERVED."
+package UsersGuide "User's Guide to the DateTime package. Copyright <html>&copy;</html> Dr. Philipp Emanuel Stelzig, 2019-present. ALL RIGHTS RESERVED."
   extends Modelica.Icons.Information;
 
   class GeneralInformation "General Information"
@@ -59,7 +59,7 @@ package UsersGuide "User's Guide to the DateTime package. Copyright <html>&copy;
     extends Modelica.Icons.Information;
     annotation(
       Documentation(info = "<html>
-&copy; Dr. Philipp Emanuel Stelzig, 2019-2025. ALL RIGHTS RESERVED. 
+&copy; Dr. Philipp Emanuel Stelzig, 2019-present. ALL RIGHTS RESERVED. 
 <br>
 <br><b>The DateTime library and all its components are subject to the license conditions in the file named LICENSE as found in the root directory of the DateTime library source code. 
 In particular, the license conditions apply to all files in the root directory of the DateTime library's source code, and to all subdirectories and their contents.</b>
@@ -72,7 +72,7 @@ In particular, the license conditions apply to all files in the root directory o
       Documentation(info = "<html>
 <br>The DateTime library is being developed by Philipp Emanuel Stelzig. 
 <br>
-<br>&copy; Dr. Philipp Emanuel Stelzig, 2019-2025. ALL RIGHTS RESERVED. 
+<br>&copy; Dr. Philipp Emanuel Stelzig, 2019-present. ALL RIGHTS RESERVED. 
 <br>
 <br> <u><b>Contact information</b></u>
 <br>

@@ -1,6 +1,6 @@
 within DateTime;
 
-package Types
+package Types "Library of dedicated data types and classes for the DateTime package. Copyright <html>&copy;</html> Dr. Philipp Emanuel Stelzig, 2019-present. ALL RIGHTS RESERVED."
   extends Modelica.Icons.TypesPackage;
 
   record Timefield "[sign]HH:MM:SS[.digits]"

@@ -1,6 +1,6 @@
 within DateTime;
 
-package Interfaces "Library of connectors, partial classes and blocks for the Datetime package. Copyright <html>&copy;</html> Dr. Philipp Emanuel Stelzig, 2019-2025. ALL RIGHTS RESERVED."
+package Interfaces "Library of connectors, partial classes and blocks for the Datetime package. Copyright <html>&copy;</html> Dr. Philipp Emanuel Stelzig, 2019-present. ALL RIGHTS RESERVED."
   extends Modelica.Icons.InterfacesPackage;
 
   partial block SO "Single Out"
