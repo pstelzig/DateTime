@@ -1,9 +1,9 @@
-# DateTime: A Modelica-native library for calendaric dates, times, and scheduling
+# DateTime: A Modelica-native library for dates, times, and scheduling
 
 This project provides a self-contained, Modelica-native library that
 - is easily integrated into any Modelica simulation model by a simple drag&drop of a single `DateTimeSystem`
-- maps relative simulation times to absolute calendaric times and back
-- allows for simulation events to be triggered at human-readable calendaric dates and times
+- maps relative simulation times to absolute calendrical times and back
+- allows for simulation events to be triggered at human-readable calendrical dates and times
 - enables modelers to intuitively integrate different timezones into one simulation and simulation time
 - supports daylight savings, timezones as well as predefined timezones like `Europe.Berlin` or `America.Los_Angeles`
 - makes it possible to repeat events in human scale like `daily`, `workday`, or `firstDayOfMonth`
@@ -19,13 +19,13 @@ Using DateTime in your Modelica models is super easy.
 - Open your favorite simulation model  
 - Drag&Drop a `DateTime.DateTimeSystem` object into your Modelica model, and set the parameters `startDateTime` to an ISO-8601 string like `2025-12-02T17:30:17.21`, and set `timezone` to a predefined timezone like e.g. `DateTime.Data.Timezones.Europe.Berlin`. This identifies your relative simulation start time with the `startDateTime` datetime interpreted in `timezone`. Optionally, set holidays as a list of ISO-8601 formatted strings like `{"2025-12-25", "2025-12-26"}`
 
-### Convert relative simulation time into calendaric date and time
+### Convert relative simulation time into calendrical date and time
 - Drag&Drop a `DateTime.Basic.SimDateTime` object into your Modelica model.
 - Simulate.  
 
-The `SimDateTime` object instance will output the relative simulation time as a calendaric date and time just like a digital watch, i.e. into its integer outputs `year`, `month`, `day`, `hours`, `minutes`, a real output `seconds` as well as the `dayOfWeek` (0=Sunday, 1=Monday,... Negative sign for holidays).
+The `SimDateTime` object instance will output the relative simulation time as a calendrical date and time just like a digital watch, i.e. into its integer outputs `year`, `month`, `day`, `hours`, `minutes`, a real output `seconds` as well as the `dayOfWeek` (0=Sunday, 1=Monday,... Negative sign for holidays).
 
-### Schedule events in your simulation model by calendaric dates and times
+### Schedule events in your simulation model by calendrical dates and times
 - Drag&Drop a `DateTime.Basic.Schedule` object into your simulation model
 - Set the first `triggerDateTime` to an ISO-8601 string like `2025-12-07T02:33.9512` at which the boolean output will jump to `true` for the first time, the `onTime` parameter for how long it shall stay `true`, and a repetition parameter (empty string for no repetition, or one of `hourly`, `daily`, `weekly`, `monthly`, `yearly`, `workdays`, `firstDayInMonth`, `lastDayInMonth`, or any positive real number)
 - Use Modelica's `edge` function on the boolean output of the `Schedule` component signal to detect a Modelica event, namely exactly when the `Schedule` component shall trigger an event in some other part of your simulation.
@@ -74,7 +74,7 @@ The library structure is
 As explained above, `DateTimeSystem`, `Basic` and `Data` contain what typical Modelica modelers would need. The `Examples` package contains basic usage examples, as well as an extensive set of unit tests to check the date and time conversion functions from the `Functions` package. The `Types` package contains classes to hold date and time objects like `DateTime.Types.Datetime`, `DateTime.Types.Date`, or `DateTime.Types.Timezone`. Note that all come with an `encapsulated operator function 'String'` so as to be able to print e.g. a `DateTime.Types.Datetime dt` like `String(dt)`. 
 
 ## Examples
-The `DateTime.Examples` contains several basic usage examples that illustrate how to use the library to convert the relative simulation time into absolute calendaric times and dates, see example models `ScheduledSignals`, `DifferentTimezones`, or `LeapSeconds`. 
+The `DateTime.Examples` contains several basic usage examples that illustrate how to use the library to convert the relative simulation time into absolute calendrical times and dates, see example models `ScheduledSignals`, `DifferentTimezones`, or `LeapSeconds`. 
 
 ### How to create components that trigger on a calendar schedule
 The `DateTime.Examples` package also shows how to create Modelica models that would consume the ouput of a `Schedule` component in order to trigger a Modelica event. The `PowerMeter` example implements such a scenario, where a simple Modelica class called `IntegratorWithScheduledReset` integrates a Real input signal, ouputs the integrated value, and resets when a boolean input signal `trigger` has a rising edge. In `PowerMeter`, this `trigger` input of `IntegratorWithScheduledReset` is connected to a `Schedule` component's output. The `Schedule` component starts at `2026-03-01T02:30:00` and uses the `firstDayInMonth` repetition pattern. In essence, `PowerMeter` models a power meter which resets the accumulated energy every start of a new month.
@@ -92,7 +92,7 @@ A dedicated technical report is in the making. For now, please cite the DateTime
 ```bibtex
 @misc{stelzig2025datetime,
     author       = {Philipp Emanuel Stelzig},
-    title        = {DateTime: A Modelica-native library for calendaric dates, times, and scheduling},
+    title        = {DateTime: A Modelica-native library for dates, times, and scheduling},
     year         = {2019--2025},
     howpublished = {\url{https://github.com/pstelzig/DateTime}}
 }

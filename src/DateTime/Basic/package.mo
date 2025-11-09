@@ -1,6 +1,6 @@
 within DateTime;
 
-package Basic "Library of basic blocks to handle absolute times, timezones, calendaric events, schedules and more. Copyright <html>&copy;</html> Dr. Philipp Emanuel Stelzig, 2019-2025. ALL RIGHTS RESERVED."
+package Basic "Library of basic blocks to handle absolute times, timezones, calendrical events, schedules and more. Copyright <html>&copy;</html> Dr. Philipp Emanuel Stelzig, 2019-2025. ALL RIGHTS RESERVED."
   extends DateTime.Icons.DatetimeIcon;
 
   block SimPosixTime "A block representing a simulation of POSIX time."
