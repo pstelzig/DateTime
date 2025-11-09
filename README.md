@@ -99,7 +99,7 @@ A technical report is in preparation. For now, please cite the library as:
 }
 ```
 
-# Authors
-The DateTime library is being developed by [Dr. Philipp Emanuel Stelzig](https://github.com/pstelzig)
+# Authors and License
+The DateTime library is being developed by [Dr. Philipp Emanuel Stelzig](https://github.com/pstelzig) as open-source software under the [MIT license](LICENSE)
 
-Copyright (c) Dr. Philipp Emanuel Stelzig, 2019-2025
+Copyright (c) Dr. Philipp Emanuel Stelzig, 2019-present
