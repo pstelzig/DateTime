@@ -31,6 +31,10 @@ Using DateTime in your Modelica models is straightforward.
 - Use Modelica's `edge()` function on the component's boolean output to trigger events.
 
 
+## Status of work
+The DateTime library is currently **in active development**. The core functionality for date and time conversion, timezone handling, and scheduling is implemented and unit tests are put in place. Note that **there might still be bugs in date and time conversions**, timezone definitions, and other parts of the library. Some advanced features, such as leap second support, are still experimental.
+
+
 ## Design
 The DateTime library is designed for ease of use, encapsulating complex time conversion functionality. This approach allows future updates to the implementation of the computation itself -- whether Modelica-native or an external C/C++ library -- without altering the user-facing components. In fact, a previous implementation of the DateTime libray used Boost.Date_Time for the date and time conversions.
 
@@ -54,7 +58,7 @@ For ease of use, all date and time inputs should be ISO 8601 strings (e.g., `YYY
 
 **Note**: DateTime was designed to make date and time definitions as human-readable and self-contained as possible. Modelers can use familiar ISO 8601 strings. Adding a timezone identifier to resolve ambiguities - effectively restricting this mechanism to named timezones - was chosen as a practical compromise for this edge case.
 
-### Experimental feature: Leap seconds
+### Leap seconds
 Leap second support is experimental and disabled by default. To enable it, set `withLeapSeconds = true` in the `DateTime.DateTimeSystem` object.
 
 ## Library structure
