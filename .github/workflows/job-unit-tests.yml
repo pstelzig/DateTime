@@ -5,6 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     container: openmodelica/openmodelica:v1.26.5-minimal
     steps:
+      - uses: actions/checkout@v4
       - name: Install dependencies
         run: |
           apt-get -qq update
@@ -16,7 +17,7 @@ jobs:
       - name: Install MoPyRegtest with tag v0.6.0-rc.1
         run: |
           python3 -m pip install mopyregtest==0.6.0rc1
-      - name: Run regression test examples
+      - name: Run unit tests
         run: |
           cd tests/
           python3 -m unittest
