@@ -4,6 +4,9 @@
 
 DateTime bridges the gap between Modelica's relative simulation clock and the real-world calendar. Drop a single `DateTimeSystem` component into your model and gain access to absolute dates, timezone-aware scheduling, daylight saving transitions, workday logic, and repeating calendar events — all without external C libraries.
 
+**Project status**  
+[![Unit tests](https://github.com/pstelzig/datetime/actions/workflows/job-unit-tests.yml/badge.svg?branch=main)](https://github.com/pstelzig/datetime/actions/workflows/job-unit-tests.yml)
+
 ---
 
 ### Key Capabilities
