@@ -1,1 +1,6 @@
 src/utils/datetimeexperiments.py
+venv/
+__pycache__
+*.pyc
+*.pyd
+tests/results/
