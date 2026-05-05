@@ -14,9 +14,9 @@ jobs:
       - name: Install Modelica STL 4.0.0
         run: |
           echo "installPackage(Modelica, \"4.0.0+maint.om\", exactMatch=true);" > installModelicaStl.mos && omc installModelicaStl.mos
-      - name: Install MoPyRegtest with tag v0.6.0-rc.1
+      - name: Install MoPyRegtest with tag v0.6.0
         run: |
-          python3 -m pip install mopyregtest==0.6.0rc1
+          python3 -m pip install mopyregtest==0.6.0
       - name: Run unit tests
         run: |
           cd tests/

@@ -12,7 +12,7 @@ class TestDatetimeRepetition(unittest.TestCase):
         tester = RegressionTest(package_folder=package_folder,
                                 model_in_package=model_name,
                                 result_folder=result_folder)
-        tester.check_simulation()
+        tester.check_success()
         #tester.cleanup(ask_confirmation=False)
 
     def test_TestLargestPreviousTrigger(self):
@@ -20,7 +20,7 @@ class TestDatetimeRepetition(unittest.TestCase):
         tester = RegressionTest(package_folder=package_folder,
                                 model_in_package=model_name,
                                 result_folder=result_folder)
-        tester.check_simulation()
+        tester.check_success()
         #tester.cleanup(ask_confirmation=False)
 
 if __name__ == '__main__':

@@ -15,7 +15,7 @@ class TestDatetimeBasic(unittest.TestCase):
         tester = RegressionTest(package_folder=package_folder,
                                 model_in_package=model_name,
                                 result_folder=result_folder)
-        tester.check_simulation()
+        tester.check_success()
         #tester.cleanup(ask_confirmation=False)
 
     def test_TestSplit(self):
@@ -23,7 +23,7 @@ class TestDatetimeBasic(unittest.TestCase):
         tester = RegressionTest(package_folder=package_folder,
                                 model_in_package=model_name,
                                 result_folder=result_folder)
-        tester.check_simulation()
+        tester.check_success()
         #tester.cleanup(ask_confirmation=False)
 
     def test_TestIsDigit(self):
@@ -31,7 +31,7 @@ class TestDatetimeBasic(unittest.TestCase):
         tester = RegressionTest(package_folder=package_folder,
                                 model_in_package=model_name,
                                 result_folder=result_folder)
-        tester.check_simulation()
+        tester.check_success()
         #tester.cleanup(ask_confirmation=False)
 
     def test_TestFindFirstDigit(self):
@@ -39,7 +39,7 @@ class TestDatetimeBasic(unittest.TestCase):
         tester = RegressionTest(package_folder=package_folder,
                                 model_in_package=model_name,
                                 result_folder=result_folder)
-        tester.check_simulation()
+        tester.check_success()
         #tester.cleanup(ask_confirmation=False)
 
     def test_TestParseTimefield(self):
@@ -47,7 +47,7 @@ class TestDatetimeBasic(unittest.TestCase):
         tester = RegressionTest(package_folder=package_folder,
                                 model_in_package=model_name,
                                 result_folder=result_folder)
-        tester.check_simulation()
+        tester.check_success()
         #tester.cleanup(ask_confirmation=False)
 
     def test_TestParseTransition(self):
@@ -55,7 +55,7 @@ class TestDatetimeBasic(unittest.TestCase):
         tester = RegressionTest(package_folder=package_folder,
                                 model_in_package=model_name,
                                 result_folder=result_folder)
-        tester.check_simulation()
+        tester.check_success()
         #tester.cleanup(ask_confirmation=False)
 
     def test_TestParseTimezone(self):
@@ -63,7 +63,7 @@ class TestDatetimeBasic(unittest.TestCase):
         tester = RegressionTest(package_folder=package_folder,
                                 model_in_package=model_name,
                                 result_folder=result_folder)
-        tester.check_simulation()
+        tester.check_success()
         #tester.cleanup(ask_confirmation=False)
 
     def test_TestParseDate(self):
@@ -71,7 +71,7 @@ class TestDatetimeBasic(unittest.TestCase):
         tester = RegressionTest(package_folder=package_folder,
                                 model_in_package=model_name,
                                 result_folder=result_folder)
-        tester.check_simulation()
+        tester.check_success()
         #tester.cleanup(ask_confirmation=False)
 
     def test_TestParseDatetime(self):
@@ -79,7 +79,7 @@ class TestDatetimeBasic(unittest.TestCase):
         tester = RegressionTest(package_folder=package_folder,
                                 model_in_package=model_name,
                                 result_folder=result_folder)
-        tester.check_simulation()
+        tester.check_success()
         #tester.cleanup(ask_confirmation=False)
 
     def test_TestDatetimeToString(self):
@@ -87,7 +87,7 @@ class TestDatetimeBasic(unittest.TestCase):
         tester = RegressionTest(package_folder=package_folder,
                                 model_in_package=model_name,
                                 result_folder=result_folder)
-        tester.check_simulation()
+        tester.check_success()
         #tester.cleanup(ask_confirmation=False)
 
 

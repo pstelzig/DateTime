@@ -12,7 +12,7 @@ class TestDatetimeDateAndTime(unittest.TestCase):
         tester = RegressionTest(package_folder=package_folder,
                                 model_in_package=model_name,
                                 result_folder=result_folder)
-        tester.check_simulation()
+        tester.check_success()
         #tester.cleanup(ask_confirmation=False)
 
     def test_TestAddSecondsToDatetime(self):
@@ -20,7 +20,7 @@ class TestDatetimeDateAndTime(unittest.TestCase):
         tester = RegressionTest(package_folder=package_folder,
                                 model_in_package=model_name,
                                 result_folder=result_folder)
-        tester.check_simulation()
+        tester.check_success()
         #tester.cleanup(ask_confirmation=False)
 
     def test_TestYearToTransitionDatetime(self):
@@ -28,7 +28,7 @@ class TestDatetimeDateAndTime(unittest.TestCase):
         tester = RegressionTest(package_folder=package_folder,
                                 model_in_package=model_name,
                                 result_folder=result_folder)
-        tester.check_simulation()
+        tester.check_success()
         #tester.cleanup(ask_confirmation=False)
 
     def test_TestIsValidDatetime(self):
@@ -36,7 +36,7 @@ class TestDatetimeDateAndTime(unittest.TestCase):
         tester = RegressionTest(package_folder=package_folder,
                                 model_in_package=model_name,
                                 result_folder=result_folder)
-        tester.check_simulation()
+        tester.check_success()
         #tester.cleanup(ask_confirmation=False)
 
     def test_TestIsWatchtimeInDaylightSaving(self):
@@ -44,7 +44,7 @@ class TestDatetimeDateAndTime(unittest.TestCase):
         tester = RegressionTest(package_folder=package_folder,
                                 model_in_package=model_name,
                                 result_folder=result_folder)
-        tester.check_simulation()
+        tester.check_success()
         #tester.cleanup(ask_confirmation=False)
 
     def test_TestIsStandardTimeInDaylightSaving(self):
@@ -52,7 +52,7 @@ class TestDatetimeDateAndTime(unittest.TestCase):
         tester = RegressionTest(package_folder=package_folder,
                                 model_in_package=model_name,
                                 result_folder=result_folder)
-        tester.check_simulation()
+        tester.check_success()
         #tester.cleanup(ask_confirmation=False)
 
     def test_TestDatetimeToPosix(self):
@@ -60,7 +60,7 @@ class TestDatetimeDateAndTime(unittest.TestCase):
         tester = RegressionTest(package_folder=package_folder,
                                 model_in_package=model_name,
                                 result_folder=result_folder)
-        tester.check_simulation()
+        tester.check_success()
         #tester.cleanup(ask_confirmation=False)
 
     def test_TestPosixToDatetime(self):
@@ -68,7 +68,7 @@ class TestDatetimeDateAndTime(unittest.TestCase):
         tester = RegressionTest(package_folder=package_folder,
                                 model_in_package=model_name,
                                 result_folder=result_folder)
-        tester.check_simulation()
+        tester.check_success()
         #tester.cleanup(ask_confirmation=False)
 
     def test_TestRoundTripPosixToPosix(self):
@@ -76,7 +76,7 @@ class TestDatetimeDateAndTime(unittest.TestCase):
         tester = RegressionTest(package_folder=package_folder,
                                 model_in_package=model_name,
                                 result_folder=result_folder)
-        tester.check_simulation()
+        tester.check_success()
         #tester.cleanup(ask_confirmation=False)
 
     def test_TestRoundTripDatetimeToDatetime(self):
@@ -84,7 +84,7 @@ class TestDatetimeDateAndTime(unittest.TestCase):
         tester = RegressionTest(package_folder=package_folder,
                                 model_in_package=model_name,
                                 result_folder=result_folder)
-        tester.check_simulation()
+        tester.check_success()
         #tester.cleanup(ask_confirmation=False)
 
     def test_TestCorrectInvalidDatetime(self):
@@ -92,7 +92,7 @@ class TestDatetimeDateAndTime(unittest.TestCase):
         tester = RegressionTest(package_folder=package_folder,
                                 model_in_package=model_name,
                                 result_folder=result_folder)
-        tester.check_simulation()
+        tester.check_success()
         #tester.cleanup(ask_confirmation=False)
 
 if __name__ == '__main__':
