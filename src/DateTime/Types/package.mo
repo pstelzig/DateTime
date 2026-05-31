@@ -3,6 +3,22 @@ within DateTime;
 package Types "Library of dedicated data types and classes for the DateTime package. Copyright <html>&copy;</html> Dr. Philipp Emanuel Stelzig, 2019-present. ALL RIGHTS RESERVED."
   extends Modelica.Icons.TypesPackage;
 
+  type TimeBackend = enumeration(
+    Modelica "Modelica native backend implementation",
+    ExternalC "C standard library implementation via external header") 
+    "Choice of time computation backend for core datetime conversion functions"
+    annotation(Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={
+          Rectangle(
+            lineColor={160,160,164},
+            fillColor={160,160,164},
+            fillPattern=FillPattern.Solid,
+            extent={{-100.0,-100.0},{100.0,100.0}},
+            radius=25.0),
+          Text(
+            textColor={255,255,255},
+            extent={{-90.0,-50.0},{90.0,50.0}},
+            textString="E")}));
+
   record Timefield "[sign]HH:MM:SS[.digits]"
     extends Modelica.Icons.Record;
     Integer sign;
@@ -336,9 +352,9 @@ package Types "Library of dedicated data types and classes for the DateTime pack
     
       // Format seconds with leading zero and handle fractional part up
       if abs(dt.seconds - floor(dt.seconds)) < 1e-6 then
-        seconds_str := String(integer(dt.seconds - floor(dt.seconds)));
-      elseif abs(dt.seconds - floor(dt.seconds)) < 1e-6 then
-        seconds_str := String(integer(dt.seconds - ceil(dt.seconds)));
+        seconds_str := String(integer(floor(dt.seconds)));
+      elseif abs(dt.seconds - ceil(dt.seconds)) < 1e-6 then
+        seconds_str := String(integer(ceil(dt.seconds)));
       else
         seconds_str := String(dt.seconds, format=".6f");
       end if;

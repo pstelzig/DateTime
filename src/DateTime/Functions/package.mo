@@ -1076,6 +1076,193 @@ The return values are as follows
   </html>"));
   end posixToDatetime;
 
+  function utcDatetimeToEpoch "Converts UTC datetime components to epoch seconds using external C (O(1) calendar arithmetic)"
+    extends Modelica.Icons.Function;
+    input Integer year;
+    input Integer month;
+    input Integer day;
+    input Integer hours;
+    input Integer minutes;
+    input Real seconds;
+    output Real epoch;
+    external "C" epoch = utcDatetimeToEpoch(year, month, day, hours, minutes, seconds)
+      annotation(Include="#include \"DateTimeExternalC.h\"",
+                 IncludeDirectory="modelica://DateTime/Resources/Include");
+  annotation(
+    Documentation(info="<html>
+<p>Converts UTC date-time components to epoch seconds (seconds since 1970-01-01T00:00:00 UTC) using an external C implementation with O(1) calendar arithmetic.</p>
+<p>This is a low-level helper used internally by <code>datetimeToPosixC</code> and <code>posixToDatetimeC</code>.</p>
+</html>"));
+  end utcDatetimeToEpoch;
+
+  function epochToUtcDatetime "Converts epoch seconds to UTC datetime components using external C (O(1) calendar arithmetic)"
+    extends Modelica.Icons.Function;
+    input Real epoch;
+    output Integer year;
+    output Integer month;
+    output Integer day;
+    output Integer hours;
+    output Integer minutes;
+    output Real seconds;
+    external "C" epochToUtcDatetime(epoch, year, month, day, hours, minutes, seconds)
+      annotation(Include="#include \"DateTimeExternalC.h\"",
+                 IncludeDirectory="modelica://DateTime/Resources/Include");
+  annotation(
+    Documentation(info="<html>
+<p>Converts epoch seconds (seconds since 1970-01-01T00:00:00 UTC) to UTC date-time components using an external C implementation based on <code>time.h</code> with O(1) calendar arithmetic.</p>
+<p>This is a low-level helper used internally by <code>datetimeToPosixC</code> and <code>posixToDatetimeC</code>.</p>
+</html>"));
+  end epochToUtcDatetime;
+
+  function datetimeToPosixC "Converts a Datetime object to a POSIX timestamp using external C for core calendar arithmetic"
+    extends Modelica.Icons.Function;
+    input Datetime dt "Datetime object";
+    input Timezone tz "Timezone object";
+    input Boolean withLeapSeconds = false "Flag to account for leap seconds";
+    output Real posixTime "POSIX timestamp";
+  protected
+    Datetime dt_utc;
+    String dt_utcStr;
+    Real standardOffsetSeconds;
+    Real daylightOffsetSeconds;
+    Real offset;
+    Integer i;
+    Integer leapSeconds;
+    Real preliminaryPosixTime;
+    parameter Data.Epoch ep;
+    parameter Data.LeapSeconds ls;
+  algorithm
+    assert(ep.dt <= dt, "The datetime must not be earlier than the epoch, but have ep=" + String(ep.dt) + " and dt=" + String(dt));
+
+    // Convert standard and daylight offsets to seconds
+    standardOffsetSeconds := tz.standardOffset.sign * (tz.standardOffset.hours * 3600 + tz.standardOffset.minutes * 60 + tz.standardOffset.seconds);
+    daylightOffsetSeconds := tz.daylightOffset.sign * (tz.daylightOffset.hours * 3600 + tz.daylightOffset.minutes * 60 + tz.daylightOffset.seconds);
+
+    // Apply the appropriate offset
+    if isWatchtimeInDaylightSaving(dt, tz) then
+      offset := standardOffsetSeconds + daylightOffsetSeconds;
+    else
+      offset := standardOffsetSeconds;
+    end if;
+
+    // Use external C for the core calendar math (O(1) instead of loop-based)
+    preliminaryPosixTime := utcDatetimeToEpoch(dt.year, dt.month, dt.day, dt.hours, dt.minutes, dt.seconds) - offset;
+
+    // Calculate the POSIX timestamp with leap seconds
+    leapSeconds := 0;
+    if withLeapSeconds then
+      if dt.seconds >= 60.0 then
+        // Walk over all leap seconds added and add if we're past it
+        for i in 1:ls.num loop
+          if preliminaryPosixTime + leapSeconds >= ls.timestamps[i] + ls.leaps[i] then
+            leapSeconds := leapSeconds + ls.leaps[i];
+          end if;
+        end for;          
+      else
+        dt_utc := addSecondsToDatetime(dt, -offset);
+        dt_utc.tz := "UTC";
+        dt_utcStr := String(dt_utc);
+    
+        // Walk over all leap seconds added and add if we're past it
+        for i in 1:ls.num loop
+          if dt_utc > ls.datetimes[i] then
+            leapSeconds := leapSeconds + ls.leaps[i];
+          end if;
+        end for;
+      end if;
+    end if;
+    
+    posixTime := preliminaryPosixTime + leapSeconds;
+  annotation(
+    Documentation(info="<html>
+<p>This function converts a <code>Datetime</code> object to a POSIX timestamp (seconds since 1970-01-01 UTC),
+using an external C implementation based on <code>time.h</code> for O(1) core calendar arithmetic.</p>
+<p>It accounts for the specified timezone, including daylight saving offsets, and can optionally include leap seconds.</p>
+<p>Functionally equivalent to <code>datetimeToPosix</code> but uses the C backend for the epoch calculation.</p>
+</html>"));
+  end datetimeToPosixC;
+
+  function posixToDatetimeC "Converts a nonnegative POSIX timestamp to a Datetime object using external C for core calendar arithmetic"
+    extends Modelica.Icons.Function;
+    input Real tstamp;
+    input Timezone tz;
+    input Boolean withLeapSeconds = false "Flag to account for leap seconds";
+    output Datetime dt;
+  protected
+    Integer i;
+    Integer normalDays;
+    Integer shortLeapDays;
+    Integer longLeapDays;
+    parameter Data.LeapSeconds ls;
+    parameter Data.Epoch ep;
+    Datetime dt_utc;
+    Integer day;
+    Real offset;
+    Real seconds;
+    Boolean isDst;
+  algorithm
+    assert(tstamp >= 0, "The timestamp must not be negative, but is " + String(tstamp));
+    
+    // Calculate the number of leap seconds that have already passed if withLeapSeconds is true
+    shortLeapDays := 0;
+    longLeapDays := 0;
+    i := 1;  
+    if withLeapSeconds then
+      while i <= ls.num and integer(tstamp) > ls.timestamps[i] loop
+        if ls.leaps[i] == -1 then
+          shortLeapDays := shortLeapDays + 1;
+        elseif  ls.leaps[i] == 1 then
+          longLeapDays := longLeapDays + 1;
+        end if;
+        i := i+1;
+      end while;
+    end if;
+   
+    normalDays := integer(floor((tstamp - shortLeapDays*(86400-1) - longLeapDays*(86400+1)) / 86400));
+    day := normalDays + shortLeapDays + longLeapDays;
+    seconds := tstamp - normalDays*86400 - shortLeapDays*(86400-1) - longLeapDays*(86400+1);
+    
+    // Use external C for the core calendar math (O(1) instead of loop-based)
+    (dt_utc.year, dt_utc.month, dt_utc.day, dt_utc.hours, dt_utc.minutes, dt_utc.seconds) := 
+      epochToUtcDatetime(day * 86400.0 + seconds);
+    dt_utc.tz := "";
+    
+    // Apply standard offset from timezone and recompute
+    offset := tz.standardOffset.sign*(tz.standardOffset.hours*3600 + tz.standardOffset.minutes*60 + tz.standardOffset.seconds);
+    dt := addSecondsToDatetime(dt_utc, offset);
+    
+    // Check if standard time is in daylight savings
+    if isStandardtimeInDaylightSaving(dt, tz) then
+      offset := tz.daylightOffset.sign*(tz.daylightOffset.hours*3600 + tz.daylightOffset.minutes*60 + tz.daylightOffset.seconds);
+      dt := addSecondsToDatetime(dt, offset);
+      dt.tz := tz.daylightName;
+      isDst := true;
+    else
+      dt.tz := tz.standardName;
+      isDst := false;
+    end if;
+    
+    // Check if UTC datetime in entire seconds is a leap second event
+    if i <= ls.num and integer(tstamp) == ls.timestamps[i] then
+      dt := addSecondsToDatetime(dt, -ls.leaps[i]);
+      dt.seconds := dt.seconds + ls.leaps[i];
+    end if;
+    
+    // Re-add dt.tz information since addSecondsToDatetime loses it
+    if isDst then
+      dt.tz := tz.daylightName;
+    else
+      dt.tz := tz.standardName;
+    end if;  
+  annotation(
+    Documentation(info="<html>
+<p>This function converts a POSIX timestamp into a <code>Datetime</code> object for a specified timezone,
+using an external C implementation for O(1) core calendar arithmetic.</p>
+<p>It correctly handles timezone offsets, daylight saving adjustments, and can optionally account for leap seconds.</p>
+<p>Functionally equivalent to <code>posixToDatetime</code> but uses the C backend for the epoch calculation.</p>
+</html>"));
+  end posixToDatetimeC;
+
   function correctInvalidDate "Corrects an invalid date for overflowing days by adjusting the day to the last valid day of the month"
     extends Modelica.Icons.Function;
     input Date d "Date object to correct";
