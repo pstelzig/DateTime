@@ -853,18 +853,12 @@ The return values are as follows
     Datetime dst_end_toc;    
     Datetime dst_start;
     Datetime dst_end;
-    String dst_start_str; // temp
-    String dst_end_str; // temp
-    String dt_str; // temp
   algorithm
     dst_start_tic := yearToTransitionDatetime(tz, dt.year, "dst_start_tic");
     dst_end_toc := yearToTransitionDatetime(tz, dt.year, "dst_end_toc");
     
     dst_start := dst_start_tic;
     dst_end := dst_end_toc;
-    dt_str := String(dt);
-    dst_start_str := String(dst_start);
-    dst_end_str := String(dst_end);
     
     if dst_start < dst_end then  // Northern hemisphere: DST falls within year: DST = [dst_start, dst_end)
       if not dt < dst_start and dt < dst_end then
