@@ -352,9 +352,9 @@ package Types "Library of dedicated data types and classes for the DateTime pack
     
       // Format seconds with leading zero and handle fractional part up
       if abs(dt.seconds - floor(dt.seconds)) < 1e-6 then
-        seconds_str := String(integer(dt.seconds - floor(dt.seconds)));
-      elseif abs(dt.seconds - floor(dt.seconds)) < 1e-6 then
-        seconds_str := String(integer(dt.seconds - ceil(dt.seconds)));
+        seconds_str := String(integer(floor(dt.seconds)));
+      elseif abs(dt.seconds - ceil(dt.seconds)) < 1e-6 then
+        seconds_str := String(integer(ceil(dt.seconds)));
       else
         seconds_str := String(dt.seconds, format=".6f");
       end if;
