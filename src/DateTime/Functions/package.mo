@@ -1489,8 +1489,6 @@ using an external C implementation for O(1) core calendar arithmetic.</p>
     Integer dow;  // Day of week
     Boolean nextWdFound;
   algorithm
-    tstamp := datetimeToPosix(dt, tz, withLeapSeconds);  
-  
     d.year := dt.year;
     d.month := dt.month;
     d.day := dt.day;
@@ -1501,6 +1499,7 @@ using an external C implementation for O(1) core calendar arithmetic.</p>
   
     // Repeation hourly
     if repetition == "hourly" then
+      tstamp := datetimeToPosix(dt, tz, withLeapSeconds);
       dt_added := posixToDatetime(tstamp + 3600, tz, withLeapSeconds);
     
     // Repeation daily
@@ -1695,7 +1694,8 @@ using an external C implementation for O(1) core calendar arithmetic.</p>
   
     else  // Try to interpret repetition as floating point number. If not successful will raise assert
       r := Modelica.Utilities.Strings.scanReal(repetition);
-      
+
+      tstamp := datetimeToPosix(dt, tz, withLeapSeconds);      
       dt_added := posixToDatetime(tstamp + r, tz, withLeapSeconds);
     end if;    
   annotation(
