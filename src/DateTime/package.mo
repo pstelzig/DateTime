@@ -10,10 +10,15 @@ package DateTime "A Modelica-native library for calendrical dates, times, and sc
     parameter DateTime.Data.WorkDays workdays = DateTime.Data.WorkDays(days = {1, 2, 3, 4, 5}) "Workdays, by default Monday,...,Friday. 0=Sunday, 1=Monday,...";
     parameter String holidays[:] = fill("", 0) "Array of dates in format YYYY-MM-DD";
     parameter Boolean withLeapSeconds = false "Whether to use leap second correction or not";
+    parameter DateTime.Types.TimeBackend timeBackend = DateTime.Types.TimeBackend.Modelica "Time computation backend for datetime conversion functions";
     Real startPosix;
   algorithm
     when initial() then    
-      startPosix := DateTime.Functions.datetimeToPosix(DateTime.Functions.parseDatetime(startDateTime), timezone, withLeapSeconds);
+      if timeBackend == DateTime.Types.TimeBackend.ExternalC then
+        startPosix := DateTime.Functions.datetimeToPosixC(DateTime.Functions.parseDatetime(startDateTime), timezone, withLeapSeconds);
+      else
+        startPosix := DateTime.Functions.datetimeToPosix(DateTime.Functions.parseDatetime(startDateTime), timezone, withLeapSeconds);
+      end if;
     end when;
 
     annotation(

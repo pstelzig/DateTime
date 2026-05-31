@@ -24,6 +24,10 @@ isWatchtimeInDaylightSaving
 isStandardtimeInDaylightSaving
 datetimeToPosix
 posixToDatetime
+utcDatetimeToEpoch
+epochToUtcDatetime
+datetimeToPosixC
+posixToDatetimeC
 correctInvalidDate
 addYearsToDate
 addMonthsToDate

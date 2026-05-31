@@ -48,7 +48,11 @@ package Basic "Library of basic blocks to handle absolute times, timezones, cale
     DateTime.Types.Datetime dt;
     Integer holidaySign;
   algorithm
-    dt := DateTime.Functions.posixToDatetime(dateTimeSystem.startPosix + time, dateTimeSystem.timezone, dateTimeSystem.withLeapSeconds);
+    if dateTimeSystem.timeBackend == DateTime.Types.TimeBackend.ExternalC then
+      dt := DateTime.Functions.posixToDatetimeC(dateTimeSystem.startPosix + time, dateTimeSystem.timezone, dateTimeSystem.withLeapSeconds);
+    else
+      dt := DateTime.Functions.posixToDatetime(dateTimeSystem.startPosix + time, dateTimeSystem.timezone, dateTimeSystem.withLeapSeconds);
+    end if;
 
     if DateTime.Functions.isDatetimeHoliday(dt, dateTimeSystem.holidays) then
       holidaySign := -1;
@@ -88,7 +92,11 @@ package Basic "Library of basic blocks to handle absolute times, timezones, cale
     DateTime.Types.Datetime dt;
     Integer holidaySign;
   algorithm
-    dt := DateTime.Functions.posixToDatetime(dateTimeSystem.startPosix + time, dateTimeSystem.timezone, dateTimeSystem.withLeapSeconds);
+    if dateTimeSystem.timeBackend == DateTime.Types.TimeBackend.ExternalC then
+      dt := DateTime.Functions.posixToDatetimeC(dateTimeSystem.startPosix + time, dateTimeSystem.timezone, dateTimeSystem.withLeapSeconds);
+    else
+      dt := DateTime.Functions.posixToDatetime(dateTimeSystem.startPosix + time, dateTimeSystem.timezone, dateTimeSystem.withLeapSeconds);
+    end if;
     
     if DateTime.Functions.isDatetimeHoliday(dt, dateTimeSystem.holidays) then
       holidaySign := -1;
@@ -128,7 +136,11 @@ model in which SimWeekday is used.</p>
   algorithm
     when initial() then
       initTrigger := DateTime.Functions.parseDatetime(triggerDateTime);
-      initTriggerPosix := DateTime.Functions.datetimeToPosix(initTrigger, triggerTimezone, dateTimeSystem.withLeapSeconds);
+      if dateTimeSystem.timeBackend == DateTime.Types.TimeBackend.ExternalC then
+        initTriggerPosix := DateTime.Functions.datetimeToPosixC(initTrigger, triggerTimezone, dateTimeSystem.withLeapSeconds);
+      else
+        initTriggerPosix := DateTime.Functions.datetimeToPosix(initTrigger, triggerTimezone, dateTimeSystem.withLeapSeconds);
+      end if;
       (prevTrigger, prevTriggerPosix) := DateTime.Functions.largestPreviousTrigger(dateTimeSystem.startPosix + time, initTrigger, repetition, triggerTimezone, dateTimeSystem.workdays, dateTimeSystem.holidays, dateTimeSystem.withLeapSeconds, autocorrect, strategy);
     end when;
 
@@ -137,7 +149,11 @@ model in which SimWeekday is used.</p>
     // Update previous trigger and next trigger once sim time is past the previous trigger
     when repetition <> "" and simTimePosix >= prevTriggerPosix + onTime then
       prevTrigger := DateTime.Functions.addSingleRepetitionToDatetime(prevTrigger, repetition, triggerTimezone, dateTimeSystem.workdays, dateTimeSystem.holidays, dateTimeSystem.withLeapSeconds, autocorrect, strategy);
-      prevTriggerPosix := DateTime.Functions.datetimeToPosix(prevTrigger, triggerTimezone, dateTimeSystem.withLeapSeconds);
+      if dateTimeSystem.timeBackend == DateTime.Types.TimeBackend.ExternalC then
+        prevTriggerPosix := DateTime.Functions.datetimeToPosixC(prevTrigger, triggerTimezone, dateTimeSystem.withLeapSeconds);
+      else
+        prevTriggerPosix := DateTime.Functions.datetimeToPosix(prevTrigger, triggerTimezone, dateTimeSystem.withLeapSeconds);
+      end if;
     end when;
 
     if simTimePosix >= prevTriggerPosix and simTimePosix < prevTriggerPosix + onTime then
@@ -171,7 +187,11 @@ model in which SimWeekday is used.</p>
     Real triggerPosix;
   algorithm
     when initial() then
-      triggerPosix := DateTime.Functions.datetimeToPosix(DateTime.Functions.parseDatetime(triggerDateTime), dateTimeSystem.timezone, dateTimeSystem.withLeapSeconds); 
+      if dateTimeSystem.timeBackend == DateTime.Types.TimeBackend.ExternalC then
+        triggerPosix := DateTime.Functions.datetimeToPosixC(DateTime.Functions.parseDatetime(triggerDateTime), dateTimeSystem.timezone, dateTimeSystem.withLeapSeconds);
+      else
+        triggerPosix := DateTime.Functions.datetimeToPosix(DateTime.Functions.parseDatetime(triggerDateTime), dateTimeSystem.timezone, dateTimeSystem.withLeapSeconds);
+      end if; 
     end when;
     y := DateTime.Functions.heaviside(dateTimeSystem.startPosix + time - triggerPosix) * max(countdownTime - (dateTimeSystem.startPosix + time - triggerPosix), 0);  
     annotation(
