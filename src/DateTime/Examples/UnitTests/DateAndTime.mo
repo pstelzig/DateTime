@@ -562,4 +562,126 @@ package DateAndTime
       assert(result == dt_expected, "Correction of invalid datetime failed for " + String(dt) + ", expected was " + String(dt_expected) + ". Got " + String(result));
     end when;
   end TestCorrectInvalidDatetime;
+
+  model TestPosixToDatetimeVsC "Verifies that posixToDatetime and posixToDatetimeC produce identical results for 8 timestamps across different timezones"
+    extends Modelica.Icons.Example;
+    parameter Types.Timezone cet  = Data.Timezones.Europe.CET_CEST;
+    parameter Types.Timezone pst  = Data.Timezones.America.PST_PDT;
+    parameter Types.Timezone utc  = Data.Timezones.Etc.UTC;
+    parameter Types.Timezone acst = Data.Timezones.Australia.ACST_ACDT;
+    parameter Types.Timezone jst  = Data.Timezones.Asia.UTC_plus_09;
+
+    Types.Datetime dtMo;
+    Types.Datetime dtC;
+  algorithm
+    when initial() then
+      // 1. CET standard time: 2024-01-15T12:00:00 CET
+      dtMo := Functions.posixToDatetime(1705316400, cet, false);
+      dtC  := Functions.posixToDatetimeC(1705316400, cet, false);
+      assert(dtMo == dtC, "Test 1 (CET std) mismatch: Mo=" + String(dtMo) + " C=" + String(dtC));
+
+      // 2. CET daylight saving time: 2024-07-15T12:00:00 CEST
+      dtMo := Functions.posixToDatetime(1721037600, cet, false);
+      dtC  := Functions.posixToDatetimeC(1721037600, cet, false);
+      assert(dtMo == dtC, "Test 2 (CET dst) mismatch: Mo=" + String(dtMo) + " C=" + String(dtC));
+
+      // 3. CET fall-back ambiguous: 2024-10-27T02:30:00 CEST
+      dtMo := Functions.posixToDatetime(1729989000, cet, false);
+      dtC  := Functions.posixToDatetimeC(1729989000, cet, false);
+      assert(dtMo == dtC, "Test 3 (CET fall-back) mismatch: Mo=" + String(dtMo) + " C=" + String(dtC));
+
+      // 4. PST daylight saving time: 2023-07-15T12:00:00 PDT
+      dtMo := Functions.posixToDatetime(1689447600, pst, false);
+      dtC  := Functions.posixToDatetimeC(1689447600, pst, false);
+      assert(dtMo == dtC, "Test 4 (PST dst) mismatch: Mo=" + String(dtMo) + " C=" + String(dtC));
+
+      // 5. PST standard time: 2024-12-15T10:30:00 PST
+      dtMo := Functions.posixToDatetime(1734287400, pst, false);
+      dtC  := Functions.posixToDatetimeC(1734287400, pst, false);
+      assert(dtMo == dtC, "Test 5 (PST std) mismatch: Mo=" + String(dtMo) + " C=" + String(dtC));
+
+      // 6. UTC: 2024-02-29T12:00:00 (leap day)
+      dtMo := Functions.posixToDatetime(1709208000, utc, false);
+      dtC  := Functions.posixToDatetimeC(1709208000, utc, false);
+      assert(dtMo == dtC, "Test 6 (UTC leap day) mismatch: Mo=" + String(dtMo) + " C=" + String(dtC));
+
+      // 7. ACST daylight saving time: 2024-12-15T12:00:00 ACDT
+      dtMo := Functions.posixToDatetime(1734226200, acst, false);
+      dtC  := Functions.posixToDatetimeC(1734226200, acst, false);
+      assert(dtMo == dtC, "Test 7 (ACST dst) mismatch: Mo=" + String(dtMo) + " C=" + String(dtC));
+
+      // 8. JST (no DST): 2025-06-01T09:00:00 JST
+      dtMo := Functions.posixToDatetime(1748739600, jst, false);
+      dtC  := Functions.posixToDatetimeC(1748739600, jst, false);
+      assert(dtMo == dtC, "Test 8 (JST) mismatch: Mo=" + String(dtMo) + " C=" + String(dtC));
+    end when;
+    annotation(
+      experiment(StartTime = 0, StopTime = 1, Tolerance = 1e-06, Interval = 0.5));
+  end TestPosixToDatetimeVsC;
+
+  model TestDatetimeToPosixVsC "Verifies that datetimeToPosix and datetimeToPosixC produce identical results for 8 datetimes across different timezones"
+    extends Modelica.Icons.Example;
+    parameter Types.Timezone cet  = Data.Timezones.Europe.CET_CEST;
+    parameter Types.Timezone pst  = Data.Timezones.America.PST_PDT;
+    parameter Types.Timezone utc  = Data.Timezones.Etc.UTC;
+    parameter Types.Timezone acst = Data.Timezones.Australia.ACST_ACDT;
+    parameter Types.Timezone jst  = Data.Timezones.Asia.UTC_plus_09;
+
+    Real posixMo;
+    Real posixC;
+    Types.Datetime dt;
+  algorithm
+    when initial() then
+      // 1. CET standard time
+      dt := Types.Datetime(2023, 10, 5, 14, 48, 0.0, "");
+      posixMo := Functions.datetimeToPosix(dt, cet, false);
+      posixC  := Functions.datetimeToPosixC(dt, cet, false);
+      assert(abs(posixMo - posixC) < 1e-6, "Test 1 (CET std) mismatch: Mo=" + String(posixMo) + " C=" + String(posixC));
+
+      // 2. CET daylight saving time, explicitly tagged CEST
+      dt := Types.Datetime(2025, 10, 26, 2, 30, 0.0, "CEST");
+      posixMo := Functions.datetimeToPosix(dt, cet, false);
+      posixC  := Functions.datetimeToPosixC(dt, cet, false);
+      assert(abs(posixMo - posixC) < 1e-6, "Test 2 (CET ambiguous CEST) mismatch: Mo=" + String(posixMo) + " C=" + String(posixC));
+
+      // 3. CET standard time, explicitly tagged CET
+      dt := Types.Datetime(2025, 10, 26, 2, 30, 0.0, "CET");
+      posixMo := Functions.datetimeToPosix(dt, cet, false);
+      posixC  := Functions.datetimeToPosixC(dt, cet, false);
+      assert(abs(posixMo - posixC) < 1e-6, "Test 3 (CET ambiguous CET) mismatch: Mo=" + String(posixMo) + " C=" + String(posixC));
+
+      // 4. PST daylight saving time
+      dt := Types.Datetime(2023, 7, 15, 12, 0, 0.0, "");
+      posixMo := Functions.datetimeToPosix(dt, pst, false);
+      posixC  := Functions.datetimeToPosixC(dt, pst, false);
+      assert(abs(posixMo - posixC) < 1e-6, "Test 4 (PST dst) mismatch: Mo=" + String(posixMo) + " C=" + String(posixC));
+
+      // 5. PST standard time
+      dt := Types.Datetime(2024, 12, 15, 10, 30, 0.0, "");
+      posixMo := Functions.datetimeToPosix(dt, pst, false);
+      posixC  := Functions.datetimeToPosixC(dt, pst, false);
+      assert(abs(posixMo - posixC) < 1e-6, "Test 5 (PST std) mismatch: Mo=" + String(posixMo) + " C=" + String(posixC));
+
+      // 6. UTC leap day
+      dt := Types.Datetime(2024, 2, 29, 12, 0, 0.0, "");
+      posixMo := Functions.datetimeToPosix(dt, utc, false);
+      posixC  := Functions.datetimeToPosixC(dt, utc, false);
+      assert(abs(posixMo - posixC) < 1e-6, "Test 6 (UTC leap day) mismatch: Mo=" + String(posixMo) + " C=" + String(posixC));
+
+      // 7. ACST daylight saving time (southern hemisphere)
+      dt := Types.Datetime(2024, 12, 15, 12, 0, 0.0, "ACDT");
+      posixMo := Functions.datetimeToPosix(dt, acst, false);
+      posixC  := Functions.datetimeToPosixC(dt, acst, false);
+      assert(abs(posixMo - posixC) < 1e-6, "Test 7 (ACST dst) mismatch: Mo=" + String(posixMo) + " C=" + String(posixC));
+
+      // 8. JST (no DST)
+      dt := Types.Datetime(2025, 6, 1, 9, 0, 0.0, "");
+      posixMo := Functions.datetimeToPosix(dt, jst, false);
+      posixC  := Functions.datetimeToPosixC(dt, jst, false);
+      assert(abs(posixMo - posixC) < 1e-6, "Test 8 (JST) mismatch: Mo=" + String(posixMo) + " C=" + String(posixC));
+    end when;
+    annotation(
+      experiment(StartTime = 0, StopTime = 1, Tolerance = 1e-06, Interval = 0.5));
+  end TestDatetimeToPosixVsC;
+
 end DateAndTime;
